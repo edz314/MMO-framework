@@ -1,9 +1,0 @@
-State 7
-Y = Flee
-Z = Beg for Mercy
-Alef = Hide
-Bet = Distract Enemy
-0.97     0.03    0       0        
-0        0.10    0.15    0.75   
-0        0       1       0      
-0        0       0       1      
