@@ -1,8 +1,8 @@
 State 2
-D = Block/Defend
 E = Retreat
 F = Call for Reinforcements
 G = Take Cover
+H = Block
 0.5050 0.2328 0.1477 0.1144
 0.2115 0.4569 0.1978 0.1339
 0.1454 0.2129 0.4261 0.2156
