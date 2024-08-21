@@ -2,13 +2,17 @@
 
 import os
 import importlib
-from src.ai.fsm.fsm_controller import FSMController
+from src.ai.fsm.npc_mind_type_fsm import NPCMindTypeFSM
 from src.ai.decision_tree.decision_tree_builder import DecisionTreeBuilder
+from src.data.npc_data import NPCData
 
 class NPCMind:
-    def __init__(self):
-        # Initialize the FSM
-        self.fsm = FSMController()
+    def __init__(self, npc_data: NPCData):
+        # Initialize the NPC data
+        self.npc_data = npc_data
+        
+        # Initialize the FSM with mind type logic
+        self.fsm = NPCMindTypeFSM(self.npc_data)
         
         # Initialize and build the decision tree
         self.decision_tree = self._initialize_decision_tree()
@@ -16,8 +20,8 @@ class NPCMind:
         # Dynamically load and add all mind states to the FSM
         self._initialize_states()
 
-        # Start in a neutral state
-        self.fsm.transition_to("Neutral")
+        # Start in the NPC's default mind type state
+        self.fsm.transition_to(self.npc_data.current_mind_type)
 
     def _initialize_decision_tree(self):
         """Build and return the decision tree."""
@@ -36,17 +40,16 @@ class NPCMind:
                 state_class = getattr(module, class_name)
                 self.fsm.add_state(class_name, state_class(self.fsm))
 
-    def update(self, npc, environment):
+    def update(self, environment):
         """
-        Update the NPC's mind, deciding on the next state and executing the current state.
-        :param npc: The NPC being controlled.
+        Update the NPC's mind, validating item requirements before transitioning states.
         :param environment: The environment in which the NPC operates.
         """
         # Use the decision tree to determine the next state
-        next_state = self.decision_tree.evaluate(npc, environment)
+        next_state = self.decision_tree.evaluate(self.npc_data, environment)
 
-        # Transition to the decided state
-        self.fsm.transition_to(next_state)
+        # Check item requirements before switching mind type/state
+        self.fsm.switch_mind_type(next_state)
 
         # Execute the current state
-        self.fsm.execute_state(npc, environment)
+        self.fsm.execute_state(self.npc_data, environment)
