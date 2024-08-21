@@ -1,0 +1,51 @@
+-- Define the NPC object
+NPC = {
+    name = "Scout",  -- NPC's name
+    position = {x = 5, y = 5},  -- Current position
+    observation_range = 10,  -- Range within which the NPC can observe
+    perception = 7,  -- NPC's perception level, affects detail observed
+}
+
+-- Define potential targets or areas to observe
+observation_targets = {
+    {name = "Enemy Camp", position = {x = 7, y = 5}, activity = "quiet"},
+    {name = "Resource Node", position = {x = 12, y = 8}, activity = "active"},
+    {name = "Bridge", position = {x = 3, y = 6}, activity = "patrolled"},
+}
+
+-- Function to calculate the distance between two points
+function calculate_distance(point1, point2)
+    local dx = point2.x - point1.x
+    local dy = point2.y - point1.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Function to observe targets within range
+function observe_targets()
+    for _, target in ipairs(observation_targets) do
+        local distance = calculate_distance(NPC.position, target.position)
+        if distance <= NPC.observation_range then
+            print(NPC.name .. " is observing " .. target.name .. " at position (" .. target.position.x .. ", " .. target.position.y .. ")")
+
+            -- Determine the detail level based on perception
+            if NPC.perception >= 7 then
+                print("Observation detail: The " .. target.name .. " is currently " .. target.activity .. ".")
+            else
+                print("Observation detail: The " .. target.name .. " is visible, but details are unclear.")
+            end
+        end
+    end
+end
+
+-- Observe action function
+function observe_action()
+    -- Print that the NPC is observing the surroundings
+    print(NPC.name .. " is observing the surroundings...")
+
+    -- Observe targets within the observation range
+    observe_targets()
+end
+
+-- Example usage:
+-- Execute the observe action
+observe_action()
