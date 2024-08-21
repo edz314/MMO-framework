@@ -1,0 +1,69 @@
+-- Define the NPC object
+NPC = {
+    name = "Hunter",  -- NPC's name
+    position = {x = 5, y = 5},  -- Current position
+    traps = {},  -- List to store traps set by the NPC
+    trap_limit = 3,  -- Maximum number of traps the NPC can set
+}
+
+-- Define a trap object template
+function create_trap(name, position, trigger_radius, damage)
+    return {
+        name = name,
+        position = position,
+        trigger_radius = trigger_radius,
+        damage = damage,
+        is_active = true,
+    }
+end
+
+-- Function to set a trap
+function set_trap(trap_name, trigger_radius, damage)
+    if #NPC.traps >= NPC.trap_limit then
+        print(NPC.name .. " cannot set more traps. Trap limit reached.")
+        return
+    end
+
+    -- Create a new trap at the NPC's current position
+    local new_trap = create_trap(trap_name, {x = NPC.position.x, y = NPC.position.y}, trigger_radius, damage)
+    table.insert(NPC.traps, new_trap)
+    print(NPC.name .. " has set a " .. trap_name .. " trap at position (" .. new_trap.position.x .. ", " .. new_trap.position.y .. ")")
+end
+
+-- Function to check if any enemy has triggered a trap
+function check_trap_trigger(enemy_position)
+    for _, trap in ipairs(NPC.traps) do
+        if trap.is_active then
+            local distance_to_enemy = calculate_distance(trap.position, enemy_position)
+            if distance_to_enemy <= trap.trigger_radius then
+                print("An enemy has triggered the " .. trap.name .. " trap! It deals " .. trap.damage .. " damage.")
+                trap.is_active = false  -- Deactivate the trap after it is triggered
+            end
+        end
+    end
+end
+
+-- Function to calculate the distance between two points
+function calculate_distance(point1, point2)
+    local dx = point2.x - point1.x
+    local dy = point2.y - point1.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Set Traps action function
+function set_traps_action()
+    -- Set a trap (example trap with name "Snare", trigger radius of 2 units, and damage of 10)
+    set_trap("Snare", 2, 10)
+
+    -- Set another trap (example trap with name "Pitfall", trigger radius of 3 units, and damage of 15)
+    set_trap("Pitfall", 3, 15)
+end
+
+-- Example usage:
+-- Execute the set traps action
+set_traps_action()
+
+-- Example of an enemy approaching a trap
+local enemy_position = {x = 6, y = 5}
+print("Enemy detected at position (" .. enemy_position.x .. ", " .. enemy_position.y .. ")")
+check_trap_trigger(enemy_position)
