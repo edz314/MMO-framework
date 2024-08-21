@@ -24,3 +24,36 @@ Interaction: Used by both FSM and Decision Tree to determine behavior and state 
 **9. WorldState**
 Description: Manages the global state of the game world, including environmental conditions and NPC positions.
 Interaction: Provides context to NPCs for making decisions and changing states.
+
+**Flow Diagrams / Sequence Diagrams**
+
+**State Transition Example:**
+
+[Start] -> [Evaluate Conditions] -> [Decision Tree] -> [Select State] -> [FSM Transition] -> [Execute State Logic] -> [Repeat]
+
+**Data Flow Example:**
+
+[Environment] --> [WorldState] --> [NPCMind] --> [FSM] --> [NPCData] --> [Decision Tree] --> [FSM]
+
+**Explanation of FSM, Decision Tree, and NPC Mind Logic**
+
+**FSM (Finite State Machine)**
+The FSM controls the active state of an NPC. States represent different behaviors (e.g., Aggressive, Defensive), and the FSM transitions between these states based on triggers or conditions provided by the Decision Tree and the environment.
+
+**Decision Tree**
+The Decision Tree evaluates game conditions, such as proximity to enemies or health levels, and determines the most appropriate state for the NPC to enter. The output of the Decision Tree informs the FSM on how to transition between states.
+
+**NPC Mind Logic**
+The NPCMind orchestrates the overall decision-making process. It leverages the Decision Tree to assess conditions and instructs the FSM to execute appropriate behavior. The NPCMind also interacts with NPCData to track the NPC's current state, inventory, and other attributes.
+
+**Data Flow and Communication Between Modules**
+
+NPCMind acts as the central controller, receiving inputs from the WorldState and Decision Tree.
+
+The FSM manages state transitions based on instructions from the Decision Tree.
+
+NPCData stores the current state and inventory, which are crucial for decision-making.
+
+WorldState provides environmental context that influences NPC behavior.
+
+This modular design allows for flexibility and extensibility, making it easy to introduce new states, actions, and decision logic as needed.
