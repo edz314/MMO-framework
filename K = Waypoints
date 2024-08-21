@@ -1,0 +1,68 @@
+-- Define the NPC object
+NPC = {
+    name = "Guard",  -- NPC's name
+    speed = 2,  -- Units per second
+    position = {x = 0, y = 0},  -- Current position
+    waypoints = {
+        {x = 5, y = 5},
+        {x = 10, y = 5},
+        {x = 10, y = 10},
+        {x = 5, y = 10}
+    },  -- List of waypoints for the NPC to follow
+    current_waypoint_index = 1,  -- Index of the current waypoint
+}
+
+-- Function to calculate the distance between two points
+function calculate_distance(point1, point2)
+    local dx = point2.x - point1.x
+    local dy = point2.y - point1.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Function to move the NPC towards the current waypoint
+function move_towards_waypoint()
+    local waypoint = NPC.waypoints[NPC.current_waypoint_index]
+
+    -- Calculate the direction vector towards the waypoint
+    local direction = {
+        x = waypoint.x - NPC.position.x,
+        y = waypoint.y - NPC.position.y
+    }
+
+    -- Normalize the direction vector
+    local distance_to_waypoint = calculate_distance(NPC.position, waypoint)
+    direction.x = direction.x / distance_to_waypoint
+    direction.y = direction.y / distance_to_waypoint
+
+    -- Move the NPC in the direction of the waypoint
+    NPC.position.x = NPC.position.x + direction.x * NPC.speed
+    NPC.position.y = NPC.position.y + direction.y * NPC.speed
+
+    -- Check if the NPC has reached the waypoint (within a small margin of error)
+    if distance_to_waypoint <= NPC.speed then
+        print(NPC.name .. " has reached waypoint " .. NPC.current_waypoint_index .. " at position: (" .. waypoint.x .. ", " .. waypoint.y .. ")")
+        NPC.current_waypoint_index = NPC.current_waypoint_index + 1  -- Move to the next waypoint
+
+        -- If all waypoints have been reached, loop back to the first one
+        if NPC.current_waypoint_index > #NPC.waypoints then
+            NPC.current_waypoint_index = 1
+        end
+    end
+end
+
+-- Waypoints action function
+function waypoints_action()
+    if #NPC.waypoints > 0 then
+        -- Move towards the current waypoint
+        move_towards_waypoint()
+    else
+        print("No waypoints defined for " .. NPC.name)
+    end
+end
+
+-- Example usage:
+-- Execute the waypoints action repeatedly to simulate movement
+for i = 1, 20 do
+    waypoints_action()
+    print(NPC.name .. "'s current position: (" .. NPC.position.x .. ", " .. NPC.position.y .. ")")
+end
