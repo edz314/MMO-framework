@@ -1,0 +1,70 @@
+-- Define the NPC object
+NPC = {
+    name = "Engineer",  -- NPC's name
+    position = {x = 5, y = 5},  -- Current position
+    defense_range = 15,  -- Range within which the NPC can set up defenses
+    defenses = {},  -- List of defenses that the NPC can set up
+}
+
+-- Define potential defense types
+defense_types = {
+    {name = "Barricade", setup_time = 5},
+    {name = "Trap", setup_time = 3},
+    {name = "Watchtower", setup_time = 10},
+}
+
+-- Define strategic locations for setting up defenses
+defense_positions = {
+    {name = "Main Gate", position = {x = 10, y = 5}},
+    {name = "West Wall", position = {x = 3, y = 7}},
+    {name = "North Entrance", position = {x = 8, y = 12}},
+}
+
+-- Function to calculate the distance between two points
+function calculate_distance(point1, point2)
+    local dx = point2.x - point1.x
+    local dy = point2.y - point1.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Function to set up a specific defense at a given position
+function set_up_defense(defense_type, defense_position)
+    print(NPC.name .. " is setting up a " .. defense_type.name .. " at " .. defense_position.name .. ".")
+    print("This will take " .. defense_type.setup_time .. " seconds.")
+
+    -- Simulate the time taken to set up the defense
+    os.execute("sleep " .. defense_type.setup_time)
+
+    -- Add the defense to the NPC's list of established defenses
+    table.insert(NPC.defenses, {type = defense_type.name, position = defense_position.position})
+    print(defense_type.name .. " set up successfully at " .. defense_position.name .. "!")
+end
+
+-- Set Up Defenses action function
+function set_up_defenses_action()
+    -- Select a defense type to set up (for demonstration, we'll select one randomly)
+    local defense_type = defense_types[math.random(#defense_types)]
+
+    -- Select a strategic position to set up the defense (for demonstration, we'll select one randomly)
+    local defense_position = defense_positions[math.random(#defense_positions)]
+
+    -- Calculate the distance to the defense position
+    local distance_to_position = calculate_distance(NPC.position, defense_position.position)
+
+    -- Check if the defense position is within the NPC's defense range
+    if distance_to_position <= NPC.defense_range then
+        -- Set up the selected defense at the chosen position
+        set_up_defense(defense_type, defense_position)
+    else
+        print(defense_position.name .. " is out of range for setting up defenses.")
+    end
+end
+
+-- Example usage:
+-- Execute the set up defenses action
+set_up_defenses_action()
+
+-- Output the status of defenses after setting them up
+for _, defense in ipairs(NPC.defenses) do
+    print("A " .. defense.type .. " has been set up at position (" .. defense.position.x .. ", " .. defense.position.y .. ").")
+end
