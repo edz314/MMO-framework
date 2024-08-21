@@ -1,0 +1,67 @@
+-- Define the NPC object
+NPC = {
+    name = "Scout",  -- NPC's name for call messages
+    call_message = "I need backup!",  -- The call message
+    call_range = 20,  -- Range within which other NPCs can hear the call
+    position = {x = 0, y = 0},
+    health_threshold = 50,  -- Health level below which the NPC calls for help
+    health = 100,  -- Current health of the NPC
+}
+
+-- Define other NPCs that can respond to the call
+allied_NPCs = {
+    {
+        name = "Ally 1",
+        position = {x = 10, y = 10},
+        responding = false
+    },
+    {
+        name = "Ally 2",
+        position = {x = 15, y = 5},
+        responding = false
+    },
+    {
+        name = "Ally 3",
+        position = {x = 25, y = -5},
+        responding = false
+    }
+}
+
+-- Function to calculate the distance between two points
+function calculate_distance(point1, point2)
+    local dx = point2.x - point1.x
+    local dy = point2.y - point1.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Call action function
+function call_action()
+    -- Check if the NPC's health is below the threshold
+    if NPC.health <= NPC.health_threshold then
+        print(NPC.name .. " calls out: \"" .. NPC.call_message .. "\"")
+        
+        -- Loop through all allied NPCs to check if they are within call range
+        for i, ally in ipairs(allied_NPCs) do
+            local distance_to_ally = calculate_distance(NPC.position, ally.position)
+
+            -- If the ally is within range, they respond to the call
+            if distance_to_ally <= NPC.call_range then
+                ally.responding = true
+                print(ally.name .. " is responding to the call! Moving to assist.")
+                -- Optionally, you can add movement logic here to have the ally move towards the calling NPC
+            else
+                print(ally.name .. " is out of call range.")
+            end
+        end
+    else
+        -- If health is above the threshold, no call is made
+        print("Health is sufficient, no need to call for help.")
+    end
+end
+
+-- Example usage:
+-- Reduce the NPC's health to trigger the call for help
+NPC.health = 40
+
+-- Execute the call action
+call_action()
