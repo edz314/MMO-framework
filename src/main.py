@@ -1,24 +1,29 @@
-from src.ai.fsm.fsm_controller import FSMController
-from mind_state_library import MindStateIdle, MindStatePatrol, MindStateAttack
+# src/main.py
+
+from src.ai.npc_mind import NPCMind
+from src.environment import Environment  # Assuming there's an environment module
+from src.npc import NPC  # Assuming there's an NPC module
 
 def main():
-    fsm = FSMController()
+    # Initialize environment and NPC
+    environment = Environment()  # Create an instance of the game environment
+    npc = NPC(name="Guardian", health=100)  # Create an NPC with initial attributes
 
-    # Add states from the Mind State library
-    fsm.add_state("Idle", MindStateIdle(fsm))
-    fsm.add_state("Patrol", MindStatePatrol(fsm))
-    fsm.add_state("Attack", MindStateAttack(fsm))
-    # Add other states as needed...
+    # Initialize NPC mind
+    npc_mind = NPCMind()
 
-    # Example transitions
-    fsm.transition_to("Idle")
-    fsm.execute_state()
+    # Main game loop
+    while True:
+        # Update NPC mind with current NPC and environment
+        npc_mind.update(npc, environment)
 
-    fsm.transition_to("Patrol")
-    fsm.execute_state()
+        # Simulate other game logic here
+        # ...
 
-    fsm.transition_to("Attack")
-    fsm.execute_state()
+        # Break condition for the loop (e.g., NPC dies or game ends)
+        if npc.health <= 0:
+            print(f"{npc.name} has perished.")
+            break
 
 if __name__ == "__main__":
     main()
