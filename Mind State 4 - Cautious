@@ -1,5 +1,8 @@
 State 4
-M N O P
+M = Hide/Stealth
+N = Observe
+O = Set Traps
+P = Move Slowly
 0.5086 0.2222 0.1540 0.1152
 0.2189 0.4258 0.2110 0.1444
 0.1335 0.2051 0.4617 0.1996
