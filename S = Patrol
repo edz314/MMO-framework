@@ -1,0 +1,55 @@
+-- Define the NPC object
+NPC = {
+    name = "Guard",  -- NPC's name
+    position = {x = 0, y = 0},  -- Current position
+    speed = 2,  -- Movement speed (units per second)
+    patrol_points = {
+        {x = 5, y = 5},
+        {x = 10, y = 5},
+        {x = 10, y = 10},
+        {x = 5, y = 10}
+    },  -- List of waypoints for the NPC to patrol
+    current_patrol_index = 1,  -- Index of the current patrol point
+}
+
+-- Function to calculate the distance between two points
+function calculate_distance(point1, point2)
+    local dx = point2.x - point1.x
+    local dy = point2.y - point1.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Function to calculate the direction vector towards a target point
+function calculate_direction(current_position, target_position)
+    local dx = target_position.x - current_position.x
+    local dy = target_position.y - current_position.y
+    local distance = calculate_distance(current_position, target_position)
+    return {x = dx / distance, y = dy / distance}
+end
+
+-- Patrol action function
+function patrol_action()
+    -- Get the current patrol point
+    local patrol_point = NPC.patrol_points[NPC.current_patrol_index]
+
+    -- Calculate the direction vector towards the patrol point
+    local direction = calculate_direction(NPC.position, patrol_point)
+
+    -- Move the NPC towards the patrol point at the specified speed
+    NPC.position.x = NPC.position.x + direction.x * NPC.speed
+    NPC.position.y = NPC.position.y + direction.y * NPC.speed
+
+    -- Check if the NPC has reached the patrol point (within a small margin of error)
+    local distance_to_point = calculate_distance(NPC.position, patrol_point)
+    if distance_to_point <= NPC.speed then
+        print(NPC.name .. " has reached patrol point " .. NPC.current_patrol_index .. " at position (" .. patrol_point.x .. ", " .. patrol_point.y .. ")")
+        NPC.current_patrol_index = NPC.current_patrol_index + 1  -- Move to the next patrol point
+
+        -- If all patrol points have been reached, loop back to the first one
+        if NPC.current_patrol_index > #NPC.patrol_points then
+            NPC.current_patrol_index = 1
+        end
+    end
+
+    -- Output the NPC's current position after moving
+    print(NPC.name 
