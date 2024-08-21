@@ -1,0 +1,63 @@
+-- Define the NPC object
+NPC = {
+    name = "Rogue",  -- NPC's name
+    position = {x = 5, y = 5},  -- Current position
+    distraction_range = 15,  -- Maximum range within which the NPC can create a distraction
+}
+
+-- Define potential enemies in the environment
+enemies_in_area = {
+    {name = "Guard 1", position = {x = 7, y = 6}, is_distracted = false},
+    {name = "Guard 2", position = {x = 10, y = 5}, is_distracted = false},
+    {name = "Guard 3", position = {x = 8, y = 10}, is_distracted = false},
+}
+
+-- Function to calculate the distance between two points
+function calculate_distance(point1, point2)
+    local dx = point2.x - point1.x
+    local dy = point2.y - point1.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Function to create a distraction at a specific position
+function create_distraction(target_position)
+    print(NPC.name .. " creates a distraction at position (" .. target_position.x .. ", " .. target_position.y .. ").")
+
+    -- Loop through each enemy to see if they are within the distraction range
+    for _, enemy in ipairs(enemies_in_area) do
+        local distance_to_distraction = calculate_distance(enemy.position, target_position)
+
+        if distance_to_distraction <= NPC.distraction_range then
+            -- Distract the enemy
+            enemy.is_distracted = true
+            print(enemy.name .. " is distracted and moves towards the distraction!")
+            -- Optionally, you can move the enemy towards the distraction point
+            enemy.position = target_position
+        else
+            print(enemy.name .. " is too far away to notice the distraction.")
+        end
+    end
+end
+
+-- Distract action function
+function distract_action()
+    -- Determine the position where the NPC will create the distraction
+    -- For example, the NPC might throw a rock to a specific location
+    local distraction_position = {x = 10, y = 8}
+
+    -- Create the distraction at the determined position
+    create_distraction(distraction_position)
+end
+
+-- Example usage:
+-- Execute the distract action
+distract_action()
+
+-- Output the status of enemies after the distraction
+for _, enemy in ipairs(enemies_in_area) do
+    if enemy.is_distracted then
+        print(enemy.name .. " has been distracted and is now at position (" .. enemy.position.x .. ", " .. enemy.position.y .. ").")
+    else
+        print(enemy.name .. " was not distracted.")
+    end
+end
