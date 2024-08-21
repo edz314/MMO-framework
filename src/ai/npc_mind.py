@@ -1,37 +1,40 @@
 # src/ai/npc_mind.py
 
+import os
+import importlib
 from src.ai.fsm.fsm_controller import FSMController
 from src.ai.decision_tree.decision_tree_builder import DecisionTreeBuilder
-from src.mind_state.aggressive_state import AggressiveState
-from src.mind_state.defensive_state import DefensiveState
-from src.mind_state.cautious_state import CautiousState
-from src.mind_state.exploratory_state import ExploratoryState
-from src.mind_state.neutral_state import NeutralState
-from src.mind_state.alert_state import AlertState
-from src.mind_state.strategic_state import StrategicState
-from src.mind_state.fearful_state import FearfulState
 
 class NPCMind:
     def __init__(self):
-        # Initialize the FSM and Decision Tree
+        # Initialize the FSM
         self.fsm = FSMController()
-        self.decision_tree_builder = DecisionTreeBuilder()
+        
+        # Initialize and build the decision tree
+        self.decision_tree = self._initialize_decision_tree()
 
-        # Build the decision tree
-        self.decision_tree = self.decision_tree_builder.get_decision_tree()
+        # Dynamically load and add all mind states to the FSM
+        self._initialize_states()
 
-        # Add states to the FSM
-        self.fsm.add_state("Aggressive", AggressiveState(self.fsm))
-        self.fsm.add_state("Defensive", DefensiveState(self.fsm))
-        self.fsm.add_state("Cautious", CautiousState(self.fsm))
-        self.fsm.add_state("Exploratory", ExploratoryState(self.fsm))
-        self.fsm.add_state("Neutral", NeutralState(self.fsm))
-        self.fsm.add_state("Alert", AlertState(self.fsm))
-        self.fsm.add_state("Strategic", StrategicState(self.fsm))
-        self.fsm.add_state("Fearful", FearfulState(self.fsm))
-
-        # Start with a neutral state
+        # Start in a neutral state
         self.fsm.transition_to("Neutral")
+
+    def _initialize_decision_tree(self):
+        """Build and return the decision tree."""
+        decision_tree_builder = DecisionTreeBuilder()
+        decision_tree_builder.build_tree()
+        return decision_tree_builder.get_decision_tree()
+
+    def _initialize_states(self):
+        """Dynamically import and add all mind states to the FSM."""
+        mind_state_dir = os.path.join(os.path.dirname(__file__), '..', 'mind_state')
+        for filename in os.listdir(mind_state_dir):
+            if filename.endswith('.py') and filename != '__init__.py':
+                module_name = f"src.mind_state.{filename[:-3]}"
+                module = importlib.import_module(module_name)
+                class_name = ''.join([word.capitalize() for word in filename[:-3].split('_')])
+                state_class = getattr(module, class_name)
+                self.fsm.add_state(class_name, state_class(self.fsm))
 
     def update(self, npc, environment):
         """
@@ -47,4 +50,3 @@ class NPCMind:
 
         # Execute the current state
         self.fsm.execute_state(npc, environment)
-
