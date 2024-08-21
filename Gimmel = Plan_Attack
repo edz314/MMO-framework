@@ -1,0 +1,61 @@
+-- Define the NPC object
+NPC = {
+    name = "Commander",  -- NPC's name
+    position = {x = 5, y = 5},  -- Current position
+    attack_range = 10,  -- Range within which the NPC can plan an attack
+    allies = {},  -- List of allies that can participate in the attack
+}
+
+-- Define potential enemies in the environment
+enemies_in_area = {
+    {name = "Enemy Leader", position = {x = 15, y = 5}, health = 100, is_targeted = false},
+    {name = "Enemy Soldier", position = {x = 10, y = 7}, health = 75, is_targeted = false},
+    {name = "Enemy Archer", position = {x = 12, y = 3}, health = 50, is_targeted = false},
+}
+
+-- Function to calculate the distance between two points
+function calculate_distance(point1, point2)
+    local dx = point2.x - point1.x
+    local dy = point2.y - point1.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Function to evaluate and select the best target for the attack
+function select_target()
+    local best_target = nil
+    local lowest_health = math.huge  -- Start with an extremely high value for comparison
+
+    for _, enemy in ipairs(enemies_in_area) do
+        local distance_to_enemy = calculate_distance(NPC.position, enemy.position)
+
+        -- Consider enemies within attack range and choose the one with the lowest health
+        if distance_to_enemy <= NPC.attack_range and enemy.health < lowest_health then
+            best_target = enemy
+            lowest_health = enemy.health
+        end
+    end
+
+    return best_target
+end
+
+-- Function to coordinate the attack with allies
+function coordinate_attack(target)
+    print(NPC.name .. " is coordinating an attack on " .. target.name .. " at position (" .. target.position.x .. ", " .. target.position.y .. ").")
+
+    -- Loop through each ally to coordinate the attack
+    for _, ally in ipairs(NPC.allies) do
+        -- Assume each ally can assist in the attack
+        local distance_to_target = calculate_distance(ally.position, target.position)
+        if distance_to_target <= ally.attack_range then
+            print(ally.name .. " is moving into position to attack " .. target.name .. ".")
+            -- The ally could move to the target or prepare an attack
+            -- ally.attack(target)  -- Example: call an attack function for the ally
+        else
+            print(ally.name .. " is too far to assist in the attack.")
+        end
+    end
+end
+
+-- Plan Attack action function
+function plan_attack_action()
+    -- Step 1: Evaluate and select
