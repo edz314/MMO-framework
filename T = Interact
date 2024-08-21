@@ -1,0 +1,52 @@
+-- Define the NPC object
+NPC = {
+    name = "Explorer",  -- NPC's name
+    position = {x = 5, y = 5},  -- Current position
+    interaction_range = 2,  -- Range within which the NPC can interact with objects
+}
+
+-- Define an object to be interacted with
+object_to_interact = {
+    name = "Ancient Door",
+    position = {x = 6, y = 5},
+    is_open = false,  -- Initial state of the object (e.g., a door being closed)
+}
+
+-- Function to calculate the distance between two points
+function calculate_distance(point1, point2)
+    local dx = point2.x - point1.x
+    local dy = point2.y - point1.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Interact action function
+function interact_action(target_object)
+    -- Calculate the distance to the object
+    local distance_to_object = calculate_distance(NPC.position, target_object.position)
+
+    -- Check if the object is within interaction range
+    if distance_to_object <= NPC.interaction_range then
+        -- Perform the interaction
+        if target_object.is_open then
+            target_object.is_open = false
+            print(NPC.name .. " closes the " .. target_object.name .. ".")
+        else
+            target_object.is_open = true
+            print(NPC.name .. " opens the " .. target_object.name .. ".")
+        end
+    else
+        -- If the object is out of range, print a message
+        print(target_object.name .. " is too far away to interact with.")
+    end
+end
+
+-- Example usage:
+-- Execute the interact action with the object
+interact_action(object_to_interact)
+
+-- Output the object's state after interaction
+if object_to_interact.is_open then
+    print(object_to_interact.name .. " is now open.")
+else
+    print(object_to_interact.name .. " is now closed.")
+end
