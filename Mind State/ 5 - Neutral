@@ -1,9 +1,0 @@
-State 5
-Q = Idle/Wait
-R = Greet
-S = Patrol
-T = Interact
-1 3 0 1
-1 0 1 0
-1 0 0 0
-1 0 0 2
