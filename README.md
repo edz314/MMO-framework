@@ -13,28 +13,23 @@ Behavior Profiles: Allows customization of NPC behavior patterns, making it easy
 Data Management: Handles real-time updates to NPC attributes and world state, ensuring responsive and adaptive NPC behavior.
 
 Directory Structure
+
 /src/: Contains all source code, organized into modules for AI, data management, core engine functionalities, and utilities.
+
 /ai/: AI logic, including FSM and Decision Trees.
+
 /data/: NPC and world data management.
-/core/: Core engine components.
+
 /utils/: Utility functions and helpers.
+
 /tests/: Unit and integration tests.
+
 /docs/: Project documentation and design documents.
+
 /assets/: Game assets like models and textures.
 
 Installation
-Clone the repository:
-bash
-Copy code
-git clone https://github.com/yourusername/MMO-Framework.git
-Install dependencies:
-bash
-Copy code
-pip install -r requirements.txt
-Run the application:
-bash
-Copy code
-python src/main.py
+to do:
 
 Usage
 The framework is designed to be easily extended and customized. You can create new NPC behaviors by defining new states and decision nodes, or by modifying the existing behavior profiles.
