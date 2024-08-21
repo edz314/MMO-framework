@@ -1,5 +1,8 @@
 State 3
-I J K L
+I = Move/Scout
+J = Examine Environment
+K = Collect Resources
+L = Set Waypoints
 0.5244 0.2330 0.1408 0.1018
 0.2030 0.4509 0.2133 0.1328
 0.1448 0.2160 0.4317 0.2076
