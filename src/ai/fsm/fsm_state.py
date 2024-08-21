@@ -1,46 +1,46 @@
-# fsm_state.py
+# src/ai/fsm/fsm_state.py
 
 from abc import ABC, abstractmethod
 
 class FSMState(ABC):
-    """
-    Abstract base class for all FSM states. Each state must implement the enter, execute, and exit methods.
-    """
-    
     def __init__(self, fsm_controller):
-        """
-        Initializes the FSMState with a reference to the FSM controller.
-
-        :param fsm_controller: The FSMController that manages this state.
-        """
         self.fsm_controller = fsm_controller
+        self.actions = []
 
     @abstractmethod
-    def enter(self):
+    def can_enter(self, npc, environment):
         """
-        This method is called when the state is entered.
+        Determine if the NPC can enter this state.
+        :param npc: The NPC in question.
+        :param environment: The environment or context in which the NPC operates.
+        :return: True if the NPC can enter this state, otherwise False.
         """
         pass
 
     @abstractmethod
-    def execute(self):
+    def enter(self, npc):
         """
-        This method is called on each game tick while the state is active.
+        Called when the state is entered.
+        :param npc: The NPC entering the state.
         """
         pass
 
     @abstractmethod
-    def exit(self):
+    def execute(self, npc, environment):
         """
-        This method is called when the state is exited.
+        Executes the state's logic, selecting and performing actions.
+        :param npc: The NPC performing actions.
+        :param environment: The environment or context in which the NPC operates.
+        """
+        for action in self.actions:
+            if action.can_execute(npc):
+                action.execute(npc, environment)
+                break
+
+    @abstractmethod
+    def exit(self, npc):
+        """
+        Called when the state is exited.
+        :param npc: The NPC exiting the state.
         """
         pass
-
-    def transition_to(self, state_name):
-        """
-        Utility method for transitioning to another state.
-
-        :param state_name: The name of the state to transition to.
-        """
-        self.fsm_controller.transition_to(state_name)
-
