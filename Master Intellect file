@@ -1,52 +1,132 @@
-Markovian Mind
-β Row 1 Row 2 Row 3 Row 4 
-0.01 0.0961 0.4981 0.152 0.3289 
-0.02 0.1094 0.5005 0.1603 0.3328
-0.03 0.1229 0.503 0.1685 0.3366 
-0.04 0.1244 0.5055 0.1765 0.3403
-0.06 0.1277 0.5105 0.3688 0.437 
-0.07 0.1294 0.639 0.3747 0.4391 
-0.08 0.1312 0.6391 0.5787 0.4411
-0.09 0.133 0.6393 0.5826 0.6322
-0.10 0.1348 0.6396 0.5864 0.6322 
-0.11 0.1366 0.6399 0.5901 0.6322 
-0.12 0.1385 0.6402 0.5938 0.6323 
-0.13 0.1405 0.6406 0.5974 0.6323 
-0.14 0.2207 0.641 0.6009 0.6323 
-0.15 0.2424 0.6415 0.6044 0.6324
-0.16 0.2637 0.642 0.6078 0.6325 
-0.18 0.3089 0.6431 0.6144 0.6326 
-0.19 0.3328 0.6437 0.6177 0.6327 
-0.20 0.3335 0.6444 0.6208 0.6328 
+-- Define the 8 Mind States
+mind_states = {
+    "Aggressive",   -- State when the NPC is actively seeking to engage in combat
+    "Defensive",    -- State when the NPC is focused on defense or fortification
+    "Exploratory",  -- State when the NPC is exploring or searching the environment
+    "Cautious",     -- State when the NPC is wary and moves carefully
+    "Neutral",      -- State when the NPC is not committed to any specific action
+    "Alert",        -- State when the NPC is aware of potential danger and is on guard
+    "Fearful",      -- State when the NPC is afraid and may be retreating or hiding
+    "Strategic"     -- State when the NPC is planning or coordinating complex actions
+}
 
+-- Define transitions between states based on conditions
+state_transitions = {
+    Aggressive = function(npc)
+        if npc.is_targeted then
+            return "Aggressive"
+        elseif npc.task == "Engage in combat" then
+            return "Aggressive"
+        else
+            return "Neutral"
+        end
+    end,
 
-Change_state_1
-142 58 51 40
-2 62 117 84 45
-3 59 77 187 88
-4 28 37 81 164
+    Defensive = function(npc)
+        if npc.current_mind_type == "Engineer" and npc.task == "Set up defenses" then
+            return "Defensive"
+        elseif npc.current_mind_type == "Guard" and npc.task == "Hold Position" then
+            return "Defensive"
+        elseif npc.is_targeted then
+            return "Alert"
+        else
+            return "Neutral"
+        end
+    end,
 
-Change_state_2
-0.4879 0.1993 0.1753 0.1375
-2 0.2013 0.3799 0.2727 0.1461
-3 0.1436 0.1873 0.4550 0.2141
-4 0.0903 0.1194 0.2613 0.5290
+    Exploratory = function(npc)
+        if npc.current_mind_type == "Scout" or npc.task == "Investigate" then
+            return "Exploratory"
+        elseif npc.task == "Patrol" then
+            return "Exploratory"
+        else
+            return "Neutral"
+        end
+    end,
 
-Change_state_3
-0 0.1 0.2 0.3
-0.2 0.3 0.2 0.1
-0.3 0.2 0.5 0.4
-0.5 0.4 0.1 0.2
+    Cautious = function(npc)
+        if npc.is_targeted then
+            return "Cautious"
+        elseif npc.task == "Move slowly" or npc.current_mind_type == "Thief" then
+            return "Cautious"
+        else
+            return "Neutral"
+        end
+    end,
 
-Change_state-4
-0.581395 0.581395 0.381395 0.2
-0.255814 0.255814 0.155814 0.1
-0.162791 0.162791 0.162791 0.3
+    Neutral = function(npc)
+        if npc.is_targeted then
+            return "Alert"
+        elseif npc.task == "Idle" then
+            return "Neutral"
+        else
+            return "Neutral"
+        end
+    end,
 
-Change_state_END
-0.9 0 0.05 0 0.15 0.05
-0 0.8 0.05 0.2 0.05 0.05
-0.01 0.1 0.5 0 0 0.05
-0.02 0.1 0.1 0.75 0 0.05
-0.07 0 0.1 0 0.7 0.05
-0 0 0.2 0.05 0.1 0.75
+    Alert = function(npc)
+        if npc.is_targeted then
+            if npc.inventory["weapon"] then
+                return "Aggressive"
+            else
+                return "Fearful"
+            end
+        elseif npc.task == "Watch" or npc.current_mind_type == "Guard" then
+            return "Alert"
+        else
+            return "Neutral"
+        end
+    end,
+
+    Fearful = function(npc)
+        if npc.health <= 20 or npc.is_outnumbered then
+            return "Fearful"
+        elseif not npc.is_targeted then
+            return "Cautious"
+        else
+            return "Fearful"
+        end
+    end,
+
+    Strategic = function(npc)
+        if npc.current_mind_type == "Commander" or npc.current_mind_type == "Tactician" then
+            return "Strategic"
+        elseif npc.subordinates then
+            return "Strategic"
+        else
+            return "Neutral"
+        end
+    end,
+}
+
+-- Function to determine the next mind state for an NPC
+function determine_next_state(npc)
+    local current_state = npc.current_state
+    if state_transitions[current_state] then
+        return state_transitions[current_state](npc)
+    else
+        return "Neutral"
+    end
+end
+
+-- Example NPC setup
+npc1 = {
+    name = "Archer 1",
+    position = {x = 5, y = 5},
+    current_mind_type = "Archer",
+    inventory = {bow = true, arrows = true, weapon = true},  -- NPC has a bow, arrows, and a weapon
+    is_targeted = true,  -- NPC is being targeted by an enemy
+    task = "Defend",  -- Current task assigned to the NPC
+    current_state = "Alert",  -- Initial state
+    mind_types = mind_types,
+}
+
+-- Example of applying the master intellect to determine the next state
+function apply_master_intellect(npc)
+    local next_state = determine_next_state(npc)
+    npc.current_state = next_state
+    print(npc.name .. " transitions to " .. npc.current_state .. " state.")
+end
+
+-- Example usage
+apply_master_intellect(npc1)
