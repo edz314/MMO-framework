@@ -1,0 +1,90 @@
+-- Define the NPC object (Leader)
+NPC = {
+    name = "Tactician",  -- NPC's name
+    position = {x = 5, y = 5},  -- Current position
+    coordination_range = 20,  -- Range within which the NPC can coordinate with allies
+    allies = {},  -- List of allies that the NPC can coordinate with
+}
+
+-- Define potential tasks for coordination
+tasks = {
+    "Flank",  -- Task to flank the enemy
+    "Hold Position",  -- Task to defend a specific position
+    "Advance",  -- Task to move forward and engage
+    "Regroup",  -- Task to regroup at a safe location
+}
+
+-- Define potential enemies or objectives in the environment
+objectives_in_area = {
+    {name = "Enemy Leader", position = {x = 15, y = 5}},
+    {name = "Supply Cache", position = {x = 12, y = 8}},
+}
+
+-- Function to calculate the distance between two points
+function calculate_distance(point1, point2)
+    local dx = point2.x - point1.x
+    local dy = point2.y - point1.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Function to coordinate a specific task with an ally
+function coordinate_task(ally, task, target_position)
+    if task == "Flank" then
+        print(NPC.name .. " coordinates with " .. ally.name .. " to flank the target at position (" .. target_position.x .. ", " .. target_position.y .. ").")
+        -- Ally would move to a flanking position relative to the target
+        ally.position = {x = target_position.x - 5, y = target_position.y}
+    elseif task == "Hold Position" then
+        print(NPC.name .. " coordinates with " .. ally.name .. " to hold position at (" .. target_position.x .. ", " .. target_position.y .. ").")
+        -- Ally would move to and defend the specified position
+        ally.position = target_position
+    elseif task == "Advance" then
+        print(NPC.name .. " coordinates with " .. ally.name .. " to advance towards position (" .. target_position.x .. ", " .. target_position.y .. ").")
+        -- Ally would move forward towards the target
+        ally.position = target_position
+    elseif task == "Regroup" then
+        print(NPC.name .. " coordinates with " .. ally.name .. " to regroup at position (" .. target_position.x .. ", " .. target_position.y .. ").")
+        -- Ally would move to a safe location to regroup
+        ally.position = target_position
+    else
+        print("Unknown task issued.")
+    end
+end
+
+-- Coordinate with Allies action function
+function coordinate_with_allies_action()
+    -- Select a task to coordinate (for demonstration, we'll select one randomly)
+    local task = tasks[math.random(#tasks)]
+
+    -- Select an ally to coordinate with (for demonstration, we'll select one randomly)
+    local ally = NPC.allies[math.random(#NPC.allies)]
+
+    -- Select a target or objective (for demonstration, we'll use the first objective in the list)
+    local target_position = objectives_in_area[1].position
+
+    -- Calculate the distance to the ally
+    local distance_to_ally = calculate_distance(NPC.position, ally.position)
+
+    -- Check if the ally is within coordination range
+    if distance_to_ally <= NPC.coordination_range then
+        -- Coordinate the selected task with the chosen ally
+        coordinate_task(ally, task, target_position)
+    else
+        print(ally.name .. " is out of coordination range and cannot receive the command.")
+    end
+end
+
+-- Example usage:
+-- Define some allies that can be coordinated with
+NPC.allies = {
+    {name = "Soldier 1", position = {x = 6, y = 6}},
+    {name = "Archer 1", position = {x = 8, y = 8}},
+    {name = "Mage 1", position = {x = 10, y = 7}},
+}
+
+-- Execute the coordinate with allies action
+coordinate_with_allies_action()
+
+-- Output the status of allies after coordination
+for _, ally in ipairs(NPC.allies) do
+    print(ally.name .. " is now at position (" .. ally.position.x .. ", " .. ally.position.y .. ").")
+end
