@@ -1,0 +1,56 @@
+flowchart TB
+    subgraph Environment
+        WorldState
+    end
+    
+    subgraph NPC
+        NPCData
+        FSMController
+        StateAggressive
+        StateDefensive
+        StateExploratory
+        StateCautious
+        StateNeutral
+        StateAlert
+        StateFearful
+        StateStrategic
+        AI_Decision_Tree
+    end
+    
+    subgraph DataManager
+        NPCDataManager
+        WorldDataManager
+    end
+    
+    subgraph UtilityModules
+        DebugTools
+        Logger
+        Pathfinding
+    end
+    
+    WorldState --> NPCData 
+    NPCData --> FSMController 
+    FSMController --> StateAggressive
+    FSMController --> StateDefensive
+    FSMController --> StateExploratory
+    FSMController --> StateCautious
+    FSMController --> StateNeutral
+    FSMController --> StateAlert
+    FSMController --> StateFearful
+    FSMController --> StateStrategic
+    FSMController --> AI_Decision_Tree 
+    
+    StateAggressive -->|Perform| Environment
+    StateDefensive -->|Perform| Environment
+    StateExploratory -->|Perform| Environment
+    StateCautious -->|Perform| Environment
+    StateNeutral -->|Perform| Environment
+    StateAlert -->|Perform| Environment
+    StateFearful -->|Perform| Environment
+    StateStrategic -->|Perform| Environment
+    
+    NPCDataManager --> NPCData 
+    WorldDataManager --> WorldState 
+    
+    AI_Decision_Tree --> FSMController
+    UtilityModules --> NPC 
