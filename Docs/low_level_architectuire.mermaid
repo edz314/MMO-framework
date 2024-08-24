@@ -1,0 +1,77 @@
+flowchart LR
+    subgraph EnvironmentModule
+        EH["EnvironmentHandler"]
+        WS["WorldState"]
+        EU["EnvironmentUpdater"]
+    end
+    
+    subgraph NPCModule
+        NC["NPCController"]
+        Perceive["NPC.perceive()"]
+        Decide["NPC.makeDecision()"]
+        Execute["NPC.executeAction()"]
+    end
+    
+    subgraph FSMModule
+        FSMC["FSMController"]
+        AddS["add_state()"]
+        Trans["transition_to()"]
+        Exec["execute_state()"]
+    end
+    
+    subgraph StateModule
+        Aggressive["AggressiveState"]
+        Check["can_enter()"]
+        EnterState["enter()"]
+        ExecuteState["execute()"]
+    end
+    
+    subgraph ActionModule
+        Attack["AttackAction"]
+        Roar["RoarAction"]
+        Flee["FleeAction"]
+    end
+    
+    subgraph DataManagerModule
+        NPCDM["NPCDataManager"]
+        WDM["WorldDataManager"]
+    end
+    
+    subgraph AIDecisionTreeModule
+        DNode["DecisionNode"]
+        DTreeBuild["DecisionTreeBuilder"]
+    end
+    
+    subgraph UtilityModule
+        Debug["DebugTools"]
+        Log["Logger"]
+        Path["Pathfinding"]
+    end
+    
+    EH -- fetches --> WS
+    EU -- updates --> WS
+    NC -- calls --> Perceive
+    Perceive -- interacts with --> EH
+    NC -- calls --> Decide
+    Decide -- invokes --> FSMC
+    FSMC -- manages --> AddS
+    FSMC -- manages --> Trans
+    FSMC -- manages --> Exec
+    Exec -- invokes --> Aggressive
+    Aggressive -- checks --> Check
+    Aggressive -- invokes --> EnterState
+    Aggressive -- invokes --> ExecuteState
+    ExecuteState -- executes --> Attack
+    ExecuteState -- executes --> Roar
+    ExecuteState -- executes --> Flee
+    NC -- calls --> Execute
+    Execute -- performs --> Attack
+    Execute -- performs --> Roar
+    Execute -- performs --> Flee
+    NC -- fetches data --> NPCDM
+    NPCDM -- updates --> WDM
+    FSMC -- uses --> DNode
+    DNode -- builds --> DTreeBuild
+    NC -- uses --> Debug
+    NC -- logs --> Log
+    NC -- calculates --> Path
