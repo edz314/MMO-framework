@@ -1,0 +1,53 @@
+flowchart LR
+    Environment -->|Provides data| FSMController
+    NPCData -->|Provides data| FSMController
+    
+    FSMController -->|Determines state| StateAggressive
+    FSMController -->|Determines state| StateDefensive
+    FSMController -->|Determines state| StateExploratory
+    FSMController -->|Determines state| StateCautious
+    FSMController -->|Determines state| StateNeutral
+    FSMController -->|Determines state| StateAlert
+    FSMController -->|Determines state| StateFearful
+    FSMController -->|Determines state| StateStrategic
+    
+    StateAggressive -->|Executes| AttackAction
+    StateAggressive -->|Executes| RoarAction
+    
+    StateDefensive -->|Executes| SetUpDefensesAction
+    StateDefensive -->|Executes| BlockAction
+    
+    StateExploratory -->|Executes| ScoutAction
+    StateExploratory -->|Executes| InvestigateAction
+    
+    StateCautious -->|Executes| MoveSlowlyAction
+    StateCautious -->|Executes| HideAction
+    
+    StateNeutral -->|Executes| IdleWaitAction
+    StateNeutral -->|Executes| GreetAction
+    
+    StateAlert -->|Executes| ScanAreaAction
+    StateAlert -->|Executes| AlertAlliesAction
+    
+    StateFearful -->|Executes| FleeAction
+    StateFearful -->|Executes| BegForMercyAction
+    
+    StateStrategic -->|Executes| PlanAttackAction
+    StateStrategic -->|Executes| CoordinateWithAlliesAction
+    
+    AttackAction -->|Affects| Environment
+    RoarAction -->|Affects| Environment
+    SetUpDefensesAction -->|Affects| Environment
+    BlockAction -->|Affects| Environment
+    ScoutAction -->|Affects| Environment
+    InvestigateAction -->|Affects| Environment
+    MoveSlowlyAction -->|Affects| Environment
+    HideAction -->|Affects| Environment
+    IdleWaitAction -->|Affects| Environment
+    GreetAction -->|Affects| Environment
+    ScanAreaAction -->|Affects| Environment
+    AlertAlliesAction -->|Affects| Environment
+    FleeAction -->|Affects| Environment
+    BegForMercyAction -->|Affects| Environment
+    PlanAttackAction -->|Affects| Environment
+    CoordinateWithAlliesAction -->|Affects| Environment
