@@ -1,0 +1,27 @@
+stateDiagram-v2
+    [*] --> Neutral : Start
+    
+    Neutral --> Alert : Detected Threat
+    Neutral --> Exploratory : Curiosity
+    
+    Alert --> Aggressive : Engage Hostile
+    Alert --> Defensive : Prepare for Defense
+    Alert --> Fearful : Overwhelmed by Threat
+    
+    Aggressive --> Alert : Threat Resolved
+    Aggressive --> Strategic : Formulate Plan
+    
+    Defensive --> Alert : Defensive Success
+    Defensive --> Strategic : Formulate Plan
+    
+    Exploratory --> Neutral : Exploration Complete
+    Exploratory --> Cautious : Detected Suspicious Activity
+    
+    Cautious --> Alert : Confirmed Threat
+    Cautious --> Fearful : High Risk Detected
+    
+    Fearful --> Alert : Safety Found
+    Fearful --> Cautious : Escaping Danger
+    
+    Strategic --> Aggressive : Execute Plan
+    Strategic --> Defensive : Fortify Position
