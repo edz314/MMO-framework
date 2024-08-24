@@ -28,12 +28,15 @@ Interaction: Provides context to NPCs for making decisions and changing states.
 **Flow Diagrams / Sequence Diagrams**
 
 **State Transition Example:**
+Here is a worked state transition example as mermaid script
 
-[Start] -> [Evaluate Conditions] -> [Decision Tree] -> [Select State] -> [FSM Transition] -> [Execute State Logic] -> [Repeat]
+https://github.com/edz314/MMO-framework/blob/master/Docs/state_file.mermaid
+
 
 **Data Flow Example:**
+Here is a worked data flow example as mermaid script
 
-[Environment] --> [WorldState] --> [NPCMind] --> [FSM] --> [NPCData] --> [Decision Tree] --> [FSM]
+https://github.com/edz314/MMO-framework/blob/master/Docs/data_flow.mermaid
 
 **Explanation of FSM, Decision Tree, and NPC Mind Logic**
 
@@ -53,6 +56,21 @@ NPCMind acts as the central controller, receiving inputs from the WorldState and
 The FSM manages state transitions based on instructions from the Decision Tree.
 
 NPCData stores the current state and inventory, which are crucial for decision-making.
+
+**High level architecture**
+
+This is the high level architecture expressed as a mermaid script at the L1 component level
+
+https://github.com/edz314/MMO-framework/blob/master/Docs/high_level_architecture.mermaid
+
+**Low Level Architecture**
+
+This is the hilow level architecture expressed as a mermaid script at the L3 function level
+
+https://github.com/edz314/MMO-framework/blob/master/Docs/low_level_architecture.mermaid
+
+
+
 
 WorldState provides environmental context that influences NPC behavior.
 
