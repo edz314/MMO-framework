@@ -14,7 +14,6 @@ class DecisionNode(ABC):
         """
         pass
 
-
 class DecisionLeaf(DecisionNode):
     def __init__(self, state_name):
         self.state_name = state_name
@@ -27,7 +26,6 @@ class DecisionLeaf(DecisionNode):
         :return: The name of the state.
         """
         return self.state_name
-
 
 class ConditionalDecisionNode(DecisionNode):
     def __init__(self, condition, true_branch, false_branch):
@@ -52,8 +50,7 @@ class ConditionalDecisionNode(DecisionNode):
             return self.true_branch.evaluate(npc, environment)
         else:
             return self.false_branch.evaluate(npc, environment)
-
-
+            
 class MarkovDecisionNode(DecisionNode):
     def __init__(self, state_transitions):
         """
@@ -88,4 +85,3 @@ class MarkovDecisionNode(DecisionNode):
         states = list(transitions.keys())
         probabilities = list(transitions.values())
         return random.choices(states, probabilities)[0]
-
