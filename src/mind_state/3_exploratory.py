@@ -38,3 +38,5 @@ class ExploratoryState(FSMState):
         print(f"{npc.name} is exiting Exploratory State.")
         # Clean up or reset any modifications made during the exploratory state
         npc.set_exploration_mode(False)
+
+
