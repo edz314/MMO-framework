@@ -71,3 +71,4 @@ class Logger:
         """Log a message at the CRITICAL level."""
         self.logger.critical(message)
 
+
