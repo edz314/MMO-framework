@@ -71,8 +71,11 @@ class NPCData:
 
     def is_alive(self):
         """
+
         Check if the NPC is alive.
         :return: True if health is greater than 0, False otherwise.
         """
+
         return self.health > 0
+
 
