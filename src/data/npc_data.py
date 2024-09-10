@@ -8,6 +8,7 @@ class NPCData:
         :param health: The health of the NPC.
         :param inventory: The inventory of the NPC, defaulting to an empty list.
         """
+
         self.name = name
         self.health = health
         self.inventory = inventory or []
@@ -16,9 +17,11 @@ class NPCData:
 
     def update_health(self, amount):
         """
+
         Update the health of the NPC.
         :param amount: The amount to modify health by (can be positive or negative).
         """
+
         self.health += amount
         if self.health < 0:
             self.health = 0
@@ -37,10 +40,12 @@ class NPCData:
         Set the current state name of the NPC.
         :param state_name: The name of the new state.
         """
+
         self.current_state_name = state_name
 
     def add_to_inventory(self, item):
         """
+
         Add an item to the NPC's inventory.
         :param item: The item to add to the inventory.
         """
@@ -48,6 +53,7 @@ class NPCData:
 
     def remove_from_inventory(self, item):
         """
+
         Remove an item from the NPC's inventory.
         :param item: The item to remove from the inventory.
         """
@@ -60,6 +66,7 @@ class NPCData:
         :param item: The item to check for.
         :return: True if the item is in the inventory, False otherwise.
         """
+
         return item in self.inventory
 
     def is_alive(self):
