@@ -7,6 +7,8 @@ class MockEnvironment:
     def is_enemy_nearby(self, npc):
         return False
 
+
+
     def update_conditions(self):
         pass
 
